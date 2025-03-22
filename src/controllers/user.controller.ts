@@ -1,59 +1,43 @@
-import {users} from "../db/users.db";
-import {NextFunction, Request, Response} from "express";
+import {  Request, Response, NextFunction } from "express";
 
-interface IUser {
-    name: string;
-    age: number;
-    gender: string;
-}
+import { StatusCodesEnum } from "../enums/status-codes.enum";
+import { IUserDTO } from "../interfaces/user.interface";
+import { userService } from "../services/user.service";
 
 class UserController {
-    // public async findAll(req: Request, res: Response, next: NextFunction): Promise<Response<IUser[]>> {
-    //    try {
-    //         throw new Error("something went wrong");
-    //         // return  res.json(users);
-    //    } catch (e) {
-    //             return  res.json({
-    //             message: e.message,
-    //             status: 400,
-    //        });
-    //    }
+  public async getAll(req: Request, res: Response) {
+    const data = await userService.getAll();
+    res.status(StatusCodesEnum.OK).json(data);
+  }
 
-    public async findAll(req: Request, res: Response, next: NextFunction): Promise<Response<IUser[]>> {
-        try {
-            throw new Error("something went wrong");
-            // return res.json(users);
-        } catch (e: unknown) {
-            if (e instanceof Error) {
-                return res.json({
-                    message: e.message,
-                    status: 400,
-                });
-            }
-            return res.json({
-                message: "Unknown error",
-                status: 400,
-            });
-        }
-    }
+  public async getById(req: Request, res: Response) {
+    const id = req.params.id;
+    const user = await userService.getById(id);
+    res.status(StatusCodesEnum.OK).json(user);
+  }
 
-    public create(req: Request, res: Response) {
-        const users = req.body;
-        users.push(users);
-        res.status(201).json({message: 'users added successfully'});
+  public async create(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.body as IUserDTO;
+      const data = await userService.create(user);
+      res.status(StatusCodesEnum.CREATED).json(data);
+    } catch (e) {
+      next(e);
     }
-    public async updateById(req: Request, res: Response) {
-        const { id } = req.params;
-        const updatedHubkaBob = req.body;
-        users[+id] = updatedHubkaBob;
-        res.status(200).json({message: 'users updated',
-            data: users[+id]});
-    }
-    public async delete(req: Request, res: Response) {
-        const { id } = req.params;
-        users.splice(+id, 1);
-        res.status(200).json({message: 'users deleted'});
-    }
+  }
+
+  public async updateById(req: Request, res: Response) {
+    const id = req.params.id;
+    const user = req.body;
+    const data = await userService.updateById(id, user);
+    res.status(StatusCodesEnum.OK).json(data);
+  }
+
+  public async deleteById(req: Request, res: Response) {
+    const id = req.params.id;
+    const data = await userService.deleteById(id);
+    res.status(StatusCodesEnum.OK).json(data);
+  }
 }
 
 export const userController = new UserController();
