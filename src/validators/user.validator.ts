@@ -1,6 +1,6 @@
 import joi from "joi";
 
- export class UserValidator {
+export class UserValidator {
     private static name = joi.string().min(3).max(10).trim();
     private static surname = joi.string().regex(/^[A-Z][a-z]{1,9}$/);
     private static age = joi.number().min(2).max(100);
@@ -15,7 +15,6 @@ import joi from "joi";
         surname: this.surname.required(),
         age: this.age.required(),
     });
-
 }
 
 //export const userValidator = new UserValidator();//такий варіант експорту тут не працює, тому що у класі UserValidator використовуються статичні методи, а з ними екземпляри класу не працюють!!!
