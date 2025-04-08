@@ -25,4 +25,4 @@ router.delete(
     userController.deleteById,
 );
 
-export const UserRouter = router;
+export const userRouter = router;

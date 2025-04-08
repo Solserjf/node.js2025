@@ -1,10 +1,20 @@
+import { RoleEnum } from "../enums/role.enum";
+
 export interface IUser {
     _id: string;
     name: string;
     surname: string;
     age: number;
-    createdAt: Date;
-    updatedAt: Date;
+    email: string;
+    password: string;
+    role: RoleEnum;
+    isDeleted: boolean;
+    isVerified: boolean;
 }
 
-export type IUserDTO = Pick<IUser, "name" | "surname" | "age">;
+type IUserCreateDTO = Pick<
+    IUser,
+    "email" | "password" | "name" | "surname" | "age"
+>;
+type IUserUpdateDTO = Pick<IUser, "name" | "surname" | "age">;
+export type { IUserCreateDTO, IUserUpdateDTO };
