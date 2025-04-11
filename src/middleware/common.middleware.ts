@@ -5,7 +5,7 @@ import { isObjectIdOrHexString } from "mongoose";
 import { ApiError } from "../errors/api.error";
 
 class CommonMiddleware {
-    public isValidate(key: string) {
+    public isIdValidate(key: string) {
         return (req: Request, res: Response, next: NextFunction) => {
             try {
                 // const { id } = req.params;//це теж працює, але якщо параметр буде називатися не id то нижчим рядком ми відхопимо і його
