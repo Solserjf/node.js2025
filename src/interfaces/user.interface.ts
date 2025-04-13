@@ -10,6 +10,7 @@ export interface IUser {
     role: RoleEnum;
     isDeleted: boolean;
     isVerified: boolean;
+    isActive: boolean;
 }
 
 type IUserCreateDTO = Pick<

@@ -42,6 +42,12 @@ class AuthService {
             dto.password,
             user.password,
         );
+        if (!user.isActive) {
+            throw new ApiError(
+                "Account is not active",
+                StatusCodesEnum.FORBIDDEN,
+            );
+        }
         if (!IsValidPassword) {
             throw new ApiError(
                 "invalid email or password",

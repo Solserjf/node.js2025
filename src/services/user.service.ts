@@ -45,5 +45,15 @@ class UserService {
             );
         }
     }
+    public async checkIsActive(id: string): Promise<boolean> {
+        const user = await this.getById(id);
+        return user.isActive;
+    }
+    public blockUser(id: string): Promise<IUser> {
+        return userRepository.blockUser(id);
+    }
+    public unBlockUser(id: string): Promise<IUser> {
+        return userRepository.unBlockUser(id);
+    }
 }
 export const userService = new UserService();

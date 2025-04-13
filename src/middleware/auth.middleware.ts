@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 
+import { RoleEnum } from "../enums/role.enum";
 import { StatusCodesEnum } from "../enums/status-codes.enum";
 import { ApiError } from "../errors/api.error";
-import { IRefresh } from "../interfaces/token.interface";
+import { IRefresh, ITokenPayload } from "../interfaces/token.interface";
 import { tokenService } from "../services/token.service";
+import { userService } from "../services/user.service";
 
 class AuthMiddleware {
     public async checkAccessToken(
@@ -46,6 +48,17 @@ class AuthMiddleware {
                 );
             }
 
+            const isActive = await userService.checkIsActive(
+                tokenPayload.userId,
+            );
+
+            if (!isActive) {
+                throw new ApiError(
+                    "ACCOUNT IS NOT ACTIVE",
+                    StatusCodesEnum.FORBIDDEN,
+                );
+            }
+
             // res.locals — це об’єкт, який дозволяє передати дані з middleware в наступні обробники.
             req.res.locals.tokenPayload = tokenPayload;
             // Тобто locals — це просто тимчасове сховище для передачі даних між middleware та контролером.
@@ -83,6 +96,20 @@ class AuthMiddleware {
                 );
             }
             req.res.locals.tokenPayload = tokenPayload;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+    public isAdmin(req: Request, res: Response, next: NextFunction): void {
+        try {
+            const { role } = req.res.locals.tokenPayload as ITokenPayload;
+            if (role !== RoleEnum.ADMIN) {
+                throw new ApiError(
+                    "No has permissions",
+                    StatusCodesEnum.FORBIDDEN,
+                );
+            }
             next();
         } catch (e) {
             next(e);
