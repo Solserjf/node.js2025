@@ -1,3 +1,4 @@
+import { templatesConstants } from "../constants/templates.constants";
 import { StatusCodesEnum } from "../enums/status-codes.enum";
 import { ApiError } from "../errors/api.error";
 import { IAuth } from "../interfaces/auth.interface";
@@ -5,6 +6,7 @@ import { ITokenPair } from "../interfaces/token.interface";
 import { IUser, IUserCreateDTO } from "../interfaces/user.interface";
 import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
+import { emailService } from "./email.service";
 import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
 import { userService } from "./user.service";
@@ -24,7 +26,12 @@ class AuthService {
             role: newUser.role,
         });
         await tokenRepository.create({ ...tokens, userId: newUser._id });
-
+        await emailService.sendEmail(
+            newUser.email,
+            "Welcome",
+            templatesConstants.WELCOME,
+            { name: newUser.name },
+        );
         return { user: newUser, tokens };
     }
 
@@ -59,6 +66,7 @@ class AuthService {
             role: user.role,
         });
         await tokenRepository.create({ ...tokens, userId: user._id });
+
         return { user, tokens };
     }
 }

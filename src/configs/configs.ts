@@ -9,6 +9,8 @@ export interface IConfig {
     REFRESH_TOKEN_SECRET: string;
     ACCESS_TOKEN_LIFETIME: any;
     REFRESH_TOKEN_LIFETIME: any;
+    EMAIL_USER: string;
+    EMAIL_PASSWORD: string;
 }
 
 const config: IConfig = {
@@ -18,6 +20,8 @@ const config: IConfig = {
     REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
     ACCESS_TOKEN_LIFETIME: process.env.ACCESS_TOKEN_LIFETIME,
     REFRESH_TOKEN_LIFETIME: process.env.REFRESH_TOKEN_LIFETIME,
+    EMAIL_USER: process.env.EMAIL_USER,
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
 };
 
 export { config };
