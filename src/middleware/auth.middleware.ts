@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { RoleEnum } from "../enums/role.enum";
 import { StatusCodesEnum } from "../enums/status-codes.enum";
+import { TokenTypeEnum } from "../enums/token-type.enum";
 import { ApiError } from "../errors/api.error";
 import { IRefresh, ITokenPayload } from "../interfaces/token.interface";
 import { tokenService } from "../services/token.service";
@@ -34,11 +35,11 @@ class AuthMiddleware {
                 //Ця функція перевіряє, що токен справжній, не прострочений і підписаний правильним секретом.
                 // Але вона не перевіряє, чи цей токен не відкликаний (revoke) або видалений з бази.
                 accessToken,
-                "access",
+                TokenTypeEnum.ACCESS,
             );
             const isTokenExists = await tokenService.isTokenExist(
                 accessToken,
-                "accessToken",
+                TokenTypeEnum.ACCESS,
             );
             if (!isTokenExists) {
                 // Тобто це перевірка, що токен дійсно дозволений до використання у системі(чи токен не відкликаний (revoke) або видалений з бази).
@@ -83,11 +84,11 @@ class AuthMiddleware {
             }
             const tokenPayload = tokenService.verifyTokens(
                 refreshToken,
-                "refresh",
+                TokenTypeEnum.REFRESH,
             );
             const isTokenExist = await tokenService.isTokenExist(
                 refreshToken,
-                "refreshToken",
+                TokenTypeEnum.REFRESH,
             );
             if (!isTokenExist) {
                 throw new ApiError(

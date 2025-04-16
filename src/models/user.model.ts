@@ -18,7 +18,7 @@ const UserSchema = new Schema(
         },
         isDeleted: { type: Boolean, default: false },
         isVerified: { type: Boolean, default: false },
-        isActive: { type: Boolean, default: true },
+        isActive: { type: Boolean, default: false },
     },
     { timestamps: true, versionKey: false },
 );

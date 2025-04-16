@@ -11,6 +11,11 @@ export interface IConfig {
     REFRESH_TOKEN_LIFETIME: any;
     EMAIL_USER: string;
     EMAIL_PASSWORD: string;
+    ACTIVATE_TOKEN_SECRET: string;
+    ACTIVATE_TOKEN_LIFETIME: any;
+    RECOVERY_TOKEN_SECRET: string;
+    RECOVERY_TOKEN_LIFETIME: any;
+    FRONTEND_URL: string;
 }
 
 const config: IConfig = {
@@ -22,6 +27,11 @@ const config: IConfig = {
     REFRESH_TOKEN_LIFETIME: process.env.REFRESH_TOKEN_LIFETIME,
     EMAIL_USER: process.env.EMAIL_USER,
     EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
+    ACTIVATE_TOKEN_SECRET: process.env.ACTIVATE_TOKEN_SECRET,
+    ACTIVATE_TOKEN_LIFETIME: process.env.ACTIVATE_TOKEN_LIFETIME,
+    RECOVERY_TOKEN_SECRET: process.env.RECOVERY_TOKEN_SECRET,
+    RECOVERY_TOKEN_LIFETIME: process.env.RECOVERY_TOKEN_LIFETIME,
+    FRONTEND_URL: process.env.FRONTEND_URL,
 };
 
 export { config };
