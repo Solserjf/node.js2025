@@ -48,7 +48,7 @@ class AuthController {
                 .tokenPayload as ITokenPayload;
             const tokens = tokenService.generateTokens({ role, userId });
             await tokenRepository.create({ ...tokens, userId });
-            res.status(StatusCodesEnum.OK).json(tokens);
+            res.status(StatusCodesEnum.OK).json({ tokens });
         } catch (e) {
             next(e);
         }
