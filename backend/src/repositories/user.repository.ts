@@ -9,7 +9,7 @@ import { User } from "../models/user.model";
 
 class UserRepository {
     public getAll(query: IUserQuery): Promise<any> {
-        // const skip = query.pageSize * (query.page - 1);
+        const skip = query.pageSize * (query.page - 1);
         // return User.find().limit(query.pageSize).skip(skip);
         const filterObject: FilterQuery<IUser> = { isDeleted: false };
 
@@ -19,32 +19,13 @@ class UserRepository {
                 { surname: { $regex: query.search, $options: "i" } },
             ];
         }
-        const orderObject = {};
-        if (query.order) {
-            if (query.order.startsWith("-")) {
-                orderObject[query.order.slice(1)] = -1;
-            } else {
-                orderObject[query.order] = 1;
-            }
-        }
-        // User.find(filterObject).limit(query.pageSize).skip(skip);
-        return User.aggregate([
-            {
-                $match: filterObject,
-            },
-            {
-                $sort: orderObject,
-            },
-            {
-                $group: {
-                    _id: null,
-                    totalItems: { $sum: 1 },
-                    data: { $push: "$$ROOT" },
-                },
-            },
-            {
-                $project: { _id: 0 },
-            },
+
+        return Promise.all([
+            User.find(filterObject)
+                .limit(query.pageSize)
+                .skip(skip)
+                .sort(query.order),
+            User.find(filterObject).countDocuments(),
         ]);
     }
 
